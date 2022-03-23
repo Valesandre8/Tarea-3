@@ -1,0 +1,72 @@
+---
+title: "Alejandre_Valeria_T3_P4"
+author: "Alejandre Sanjuán Carla Valeria"
+date: "23/3/2022"
+output: html_document
+---
+
+
+## Red de señalización
+A partir de la red de señalizacion mostrada en la figura 1
+
+a) Elabora una representación verbal de la red
+
+Es una red que explica la transducción de señales de una planta y el activador o señal inicio de esta red es el ácido abscísico, y como resultado de esto obtendremos el cierre de los estomas en las hojas.
+
+b) Elabora una tabla de posibles reglas de la red
+
+Tenemos que cargar BoolNet para comenzar a utilizar loadNetwork y cargar la red base las tablas de verdad.
+
+targets, factors
+
+CIS, cGMP & cADPR & InsP3
+cGMP, GC
+cADPR, ADPRc
+InsP3,PLC
+GC, NO 
+ADPRc, NO 
+PLC,CA2
+NO, NOS 
+NOS,CA2
+CA2, CaIM & CIS & !CA2ATP
+CaIM,!Depolar
+CA2ATP, CA2
+KEV, CA2
+HATP, !CA2 
+AnionEM, CA2
+Clousure, AnionEM & KOUT & KAP
+KOUT, Depolar
+KAP, Depolar 
+Depolar, KEV & ! HATP & ! KOUT & AnionEM & CA2ATP
+
+Graficamos la red para verificar que si interprete bien las reglas con las que se describe
+
+```{r}
+library(BoolNet)
+
+red_4 <- loadNetwork("GNRnet.txt")
+
+red_4
+
+plotNetworkWiring(red_4)
+
+```
+
+c)Encuentra y discute biologicamente el significado de los atractores 
+```{r}
+atrac_4 <- getAttractors(red_4)
+
+atrac_4
+```
+Tenemos solo un atractor simple (puntual) que esta en un estado posible. Puede que si tenga sentido el tener solo un atractor aunque en una red biologica se esperaria que hubiera mas de uno por las condiciones de la red.
+Sabemos que en este estado los que permanecen activos en la red son CaIM y AnionEM, tiene sentido porque CAIM ayuda a la activacion de CA2 siendo un factor central de la red que activa hasta 4 elementos y uno de ellos es AnionEM y este parte de la activacion de Depolar.
+
+Graficamos los atractores
+
+```{r}
+
+plotAttractors(atrac_4)
+```
+Cuando todos estan apagados estos dos tenderan a estar activos para comenzar la activacion y la inihibicion de los mismos no puede estar activada porque afectaria la mitad de la regulación.
+
+

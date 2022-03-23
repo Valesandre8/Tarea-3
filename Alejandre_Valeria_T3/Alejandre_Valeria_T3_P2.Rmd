@@ -1,0 +1,87 @@
+---
+title: "Alejandre_Valeria_T3_P2"
+author: "Alejandre Sanjuán Carla Valeria"
+date: "22/3/2022"
+output: html_document
+---
+
+
+## Red booleana
+
+Genera una red de regulación transripcional con 5 nodos y, al menos, 7 interacciones regulatorias, escoge al menos 3 inhibiciones).
+
+a) Escribe las tablas de verdad de las reglas
+
+Las tablas de verdad serian asi, considerando que mis genes seran denominados como A,B,C,D,E.
+
+targets(ABC), factorS (REGLA)
+
+A, B AND NOT C  =  A, B & !C
+B, B AND NOT E  =  B, B & !E
+C, A OR F AND NOT D  = C, A | E &!D
+D, C 
+E, D
+
+Tenemos que cargar BoolNet para comenzar a trabajar con nuestras tablas de verdad
+
+```{r}
+library(BoolNet)
+```
+b) Escribe las reglas para generar una red de tipo Boolnet.
+Lo hice en un formato de texto plano y luego cargamos el archivo usando loadNetwork 
+
+
+
+```{r}
+red_1 <- loadNetwork("red tarea.txt")
+
+red_1
+
+
+```
+**Para visualizar mejor la red podemos plotearla con plotNetworkWiring, 
+```{r}
+plotNetworkWiring(red_1)
+
+```
+c) Encuentra todos los atractores de tu red, esto lo podemos hacer ya que tenemos la red cargada
+```{r}
+atrac_1 <- getAttractors(red_1)
+
+atrac_1
+
+```
+Encontramos dos atractores:
+El primero es un atractor simple que tiene solo 1 estado, osea que es puntual, todos se encuentrana apagados (A,B,C,D,E)-
+El segundo atractor tambien es simple y tiene 3 estados donde justo estan marcados las 3 interacciones ihibitorias en dicho estado sucesivamente. 
+
+###d) ¿Cúal ser ́ıa el estado final más probable?
+Utilizando la tabla de transición de los estados podemos ver cuales seran los estados finales y ver cual es el estado final más probable
+
+```{r}
+getTransitionTable(atrac_1)
+```
+
+Es más probable que esten apagos todos mientras que C,D,E con acción inhibidora estan encendidos y menos probable que todos esten apagados.
+
+e) Dibuja todos los estados y sus atractores
+```{r}
+plotAttractors(atrac_1)
+
+
+```
+Al graficas los atractores vemos como en el primer atractor todos se van a encontrar apagados y en el segundo como C, D Y E van a tener una intermitencia sucesiva en su activación, es menos probable que esten todos apagados a que existan una alternancia en la activación de los genes.
+
+```{r}
+plotStateGraph(atrac_1)
+
+
+```
+
+
+
+
+
+
+
+

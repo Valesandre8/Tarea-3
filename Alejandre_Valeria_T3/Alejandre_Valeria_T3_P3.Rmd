@@ -1,0 +1,92 @@
+---
+title: "Alejandre_Valeria_T3_P3"
+author: "Alejandre Sanjuán Carla Valeria"
+date: "23/3/2022"
+output: html_document
+---
+
+
+## Red de co-gustos
+
+A partir de las dos versiones de la red de co-gustos: la dicot ́omica (D) y la pesada (P).
+Elabora un programa en R que calcule:
+Primero cargams igraph
+
+Cargamos la red y establecemos el valor de las correlaciones, entendiendo que debemos tener 3 outlayers.
+el valor de 0.75 es umbral para establecer la correlación, por lo tanto, valores menores a  0.75 implicaran que no hay relación de gustos, los que no alanzan este valor no estan conectados con ninguno otro en este umbral.
+
+```{r}
+library(igraph)
+
+red_amix <- read.csv("Red de co-gustos 2022 - Hoja 1.csv")
+
+red_amix
+
+row.names(red_amix) <- red_amix[,1]
+red_amix <- red_amix[,-1]
+
+mat_cor<-cor(t(red_amix))
+View(mat_cor)
+
+mat_ady<-(1+mat_cor)/2
+diag(mat_ady)<-0
+
+mat_ady_1<-ifelse(mat_ady>0.75,1,0)
+
+red_2 <- graph_from_adjacency_matrix(mat_ady, mode = "undirected", weighted = NULL )
+
+
+```
+*no me dejaba correrlo con la pesada ... :(
+
+a) Dibuja la red con al menos tres layouts (D y P).
+
+```{r}
+
+plot(red_2)
+
+```
+
+b) La distribución de conectividades (D).
+
+```{r}
+
+ditco <- degree(red_2)
+
+ditco
+
+```
+
+c) Los nodos m ́as conectados (D)
+
+```{r}
+
+ head(sort(ditco, decreasing = T),3)
+
+```
+Como la red no tiene los valores, porque no cargue la red pesada, todos son 0
+d) Los nodos mas importantes con al menos tres medidas de centralidad (D) 
+Utilizando el degree, closeness y la exencentricidad
+
+```{r}
+
+head(sort(ditco, decreasing = T),3)
+
+head(sort(closeness(red_2),decreasing = T),3)
+
+head(sort(eccentricity(red_2), decreasing = F),3)
+
+ 
+```
+
+e) Los clusters obtenidos con al menos tres metodos de clusterizacion (D y P)
+
+```{r}
+
+clic_2 <- cluster.distribution(red_2)
+
+clic_3 <- cluster_fast_greedy(red_2)
+ 
+```
+
+
